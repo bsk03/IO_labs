@@ -31,7 +31,7 @@ public class BoardTest {
     @Test
     void clean_method_works() {
         board.placeToken(1, 2, new Token(GOLD_TOKEN_LABEL));
-        board.placeToken(board.size - 1, board.size - 1, new Token(GOLD_TOKEN_LABEL));
+        board.placeToken(board.getSize() - 1, board.getSize() - 1, new Token(GOLD_TOKEN_LABEL));
         board.clean();
         Assertions.assertTrue(_is_board_clean());
     }
@@ -47,7 +47,7 @@ public class BoardTest {
 
     // -- utils
     boolean _is_board_clean() {
-        int size = board.size;
+        int size = board.getSize();
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {
                 if (!board.square(col, row).label.equals(EMPTY_TOKEN_LABEL)) {

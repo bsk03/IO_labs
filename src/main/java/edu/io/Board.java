@@ -3,8 +3,8 @@ package edu.io;
 public class Board {
     private static final String EMPTY_TOKEN_LABEL = "\u30FB";
     
-    public final int size;
-    public final Token[][] grid;
+    private final int size;
+    private final Token[][] grid;
 
     public Board() {
         this(8);
@@ -14,6 +14,10 @@ public class Board {
         this.size = size;
         this.grid = new Token[size][size];
         clean();
+    }
+
+    public int getSize() {
+        return size;
     }
 
     public void clean() {
@@ -27,6 +31,10 @@ public class Board {
     public void placeToken(int col, int row, Token token) {
         if (col >= 0 && col < size && row >= 0 && row < size) {
             grid[row][col] = token;
+        } else {
+            throw new IndexOutOfBoundsException(
+                String.format("Invalid coordinates: col=%d, row=%d. Board size is %d.", col, row, size)
+            );
         }
     }
 
@@ -34,7 +42,9 @@ public class Board {
         if (col >= 0 && col < size && row >= 0 && row < size) {
             return grid[row][col];
         }
-        return null;
+        throw new IndexOutOfBoundsException(
+            String.format("Coordinates out of bounds: col=%d, row=%d, size=%d", col, row, size)
+        );
     }
 
     public void display() {
