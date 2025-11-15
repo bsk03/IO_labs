@@ -7,8 +7,6 @@ public class Board {
     private final int size;
     private final Token[][] grid;
 
-
-
     public Board(int size) {
         this.size = size;
         this.grid = new Token[size][size];
@@ -21,7 +19,7 @@ public class Board {
 
     public record Coords(int col, int row) {}
 
-    public int getSize() {
+    public int size() {
         return size;
     }
 
@@ -43,26 +41,21 @@ public class Board {
         }
     }
 
-    public Token peekToken(int col, int row) {
-        return grid[row][col];
+    public void display() {
+        for (int row = 0; row < size; row++) {
+            for (int col = 0; col < size; col++) {
+                System.out.print(grid[row][col]);
+            }
+            System.out.println();
+        }
     }
 
-
-    public Token square(int col, int row) {
+    public Token peekToken(int col, int row) {
         if (col >= 0 && col < size && row >= 0 && row < size) {
             return grid[row][col];
         }
         throw new IndexOutOfBoundsException(
                 String.format("Coordinates out of bounds: col=%d, row=%d, size=%d", col, row, size)
         );
-    }
-
-    public void display() {
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                System.out.print(grid[i][j]);
-            }
-            System.out.println();
-        }
     }
 }
