@@ -16,10 +16,14 @@ public class PlayerToken extends Token {
     private int row;
     private final Board board;
 
+    public PlayerToken(Board board) {
+        this(board, 0, 0);
+    }
+
     public PlayerToken(Board board, int col, int row) {
         super(Label.PLAYER_TOKEN_LABEL);
 
-        if (col < 0 || col >= board.getSize() || row < 0 || row >= board.getSize()) {
+        if (col < 0 || col >= board.size() || row < 0 || row >= board.size()) {
             throw new IllegalArgumentException("Player outside board");
         }
 
@@ -46,13 +50,15 @@ public class PlayerToken extends Token {
             case NONE -> { return; }
         }
 
-        if (newCol < 0 || newCol >= board.getSize() || newRow < 0 || newRow >= board.getSize()) {
+        if (newCol < 0 || newCol >= board.size() || newRow < 0 || newRow >= board.size()) {
             throw new IllegalArgumentException("Cannot move outside the board");
         }
 
         board.placeToken(col, row, new EmptyToken());
+
         col = newCol;
         row = newRow;
+
         board.placeToken(col, row, this);
     }
 }
