@@ -1,18 +1,40 @@
 package edu.io;
 
+import edu.io.token.GoldToken;
+import edu.io.token.PlayerToken;
+
+import java.util.Scanner;
+
 public class Main {
-    private static final String GOLD_TOKEN_LABEL = "💰︎";
-    private static final String PLAYER_TOKEN_LABEL = "웃";
-
     public static void main(String[] args) {
-        Board board = new Board();
 
-        Token gold = new Token(GOLD_TOKEN_LABEL);
-        Token player = new Token(PLAYER_TOKEN_LABEL);
+        Board board = new Board(8);
+        PlayerToken player = new PlayerToken(board, 3, 1);
 
-        board.placeToken(1, 2, gold);
-        board.placeToken(4, 5, player);
+        board.placeToken(3,3, new GoldToken());
 
-        board.display();
+        Scanner sc = new Scanner(System.in);
+
+
+        while (true) {
+            board.display();
+            System.out.print("Move (W,S,A,D):");
+
+            String s = sc.nextLine().trim().toUpperCase();
+            if (s.isEmpty()) continue;
+
+            try {
+                switch (s) {
+                    case "A" -> player.move(PlayerToken.Move.LEFT);
+                    case "D" -> player.move(PlayerToken.Move.RIGHT);
+                    case "W" -> player.move(PlayerToken.Move.UP);
+                    case "S" -> player.move(PlayerToken.Move.DOWN);
+                }
+            } catch (IllegalArgumentException e) {
+                System.out.println("Border");
+            }
+
+            System.out.println();
+        }
     }
 }
