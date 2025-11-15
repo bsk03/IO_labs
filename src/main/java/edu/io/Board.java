@@ -4,8 +4,6 @@ import edu.io.token.EmptyToken;
 import edu.io.token.Token;
 
 public class Board {
-    private static final String EMPTY_TOKEN_LABEL = "\u30FB";
-
     private final int size;
     private final Token[][] grid;
 
@@ -30,7 +28,7 @@ public class Board {
     public void clean() {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                grid[i][j] = new Token(EMPTY_TOKEN_LABEL);
+                grid[i][j] = new EmptyToken();
             }
         }
     }
