@@ -1,24 +1,41 @@
-name: Java CI
+name: Java Tests
 
 on:
   push:
     branches: [ "**" ]
   pull_request:
     branches: [ "**" ]
+  workflow_dispatch:
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up JDK 21
+      - name: Set up JDK
         uses: actions/setup-java@v4
         with:
           java-version: "21"
           distribution: "temurin"
 
-      - name: Build with Maven
-        run: mvn -B verify
+      - name: Download JUnit 5
+        run: |
+          mkdir -p libs
+          curl -L -o libs/junit-platform-console-standalone.jar \
+            https://search.maven.org/remotecontent?filepath=org/junit/platform/junit-platform-console-standalone/1.10.2/junit-platform-console-standalone-1.10.2.jar
+
+      - name: Compile all Java sources
+        run: |
+          mkdir -p out
+          find src/main/java -name "*.java" > sources.txt
+          find src/tests/java -name "*.java" >> sources.txt
+          javac -cp libs/junit-platform-console-standalone.jar @sources.txt -d out
+
+      - name: Run JUnit tests
+        run: |
+          java -jar libs/junit-platform-console-standalone.jar \
+            -cp out \
+            --scan-classpath
