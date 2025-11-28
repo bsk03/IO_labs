@@ -1,6 +1,7 @@
 package edu.io.token;
 
 import edu.io.Board;
+import edu.io.Player;
 
 public class PlayerToken extends Token {
 
@@ -15,18 +16,28 @@ public class PlayerToken extends Token {
     private int col;
     private int row;
     private final Board board;
+    private final Player player;
 
-    public PlayerToken(Board board) {
-        this(board, 0, 0);
+    public PlayerToken(Player player, Board board) {
+        super(Label.PLAYER_TOKEN_LABEL);
+        this.player = player;
+        this.board = board;
+        
+        Board.Coords coords = board.getAvailableSquare();
+        this.col = coords.col();
+        this.row = coords.row();
+        
+        board.placeToken(col, row, this);
     }
 
-    public PlayerToken(Board board, int col, int row) {
+    public PlayerToken(Player player, Board board, int col, int row) {
         super(Label.PLAYER_TOKEN_LABEL);
 
         if (col < 0 || col >= board.size() || row < 0 || row >= board.size()) {
             throw new IllegalArgumentException("Player outside board");
         }
 
+        this.player = player;
         this.col = col;
         this.row = row;
         this.board = board;
@@ -53,6 +64,9 @@ public class PlayerToken extends Token {
         if (newCol < 0 || newCol >= board.size() || newRow < 0 || newRow >= board.size()) {
             throw new IllegalArgumentException("Cannot move outside the board");
         }
+
+        var token = board.peekToken(newCol, newRow);
+        player.interactWithToken(token);
 
         board.placeToken(col, row, new EmptyToken());
 
