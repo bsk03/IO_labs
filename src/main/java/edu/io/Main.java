@@ -1,8 +1,7 @@
 package edu.io;
 
-import edu.io.token.GoldToken;
-import edu.io.token.PlayerToken;
-import edu.io.token.PyriteToken;
+import edu.io.player.Player;
+import edu.io.token.*;
 
 import java.util.Scanner;
 
@@ -19,6 +18,9 @@ public class Main {
         board.placeToken(2, 6, new GoldToken(0.5));
         board.placeToken(4, 4, new PyriteToken());
         board.placeToken(6, 2, new PyriteToken());
+        board.placeToken(2, 2, new PickaxeToken());
+        board.placeToken(7, 7, new PickaxeToken(2.0));
+        board.placeToken(4, 6, new AnvilToken());
 
         Scanner sc = new Scanner(System.in);
         PlayerToken token = player.token();
