@@ -5,14 +5,19 @@ import edu.io.token.*;
 public class Player {
     private PlayerToken token;
     public final Gold gold;
+    public final Vitals vitals;
     private final Shed shed;
 
     public Player() {
         this.gold = new Gold();
+        this.vitals = new Vitals();
         this.shed = new Shed();
     }
 
     public void assignToken(PlayerToken token) {
+        if (token == null) {
+            throw new NullPointerException("Token cannot be null");
+        }
         this.token = token;
     }
 
@@ -33,6 +38,14 @@ public class Player {
     }
 
     public void interactWithToken(Token token) {
+        if (token == null) {
+            throw new NullPointerException("Token cannot be null");
+        }
+        
+        if (!vitals.isAlive()) {
+            throw new IllegalStateException("player is dead");
+        }
+        
         if (token instanceof GoldToken goldToken) {
             Tool tool = shed.getTool();
             double amount = goldToken.amount();
@@ -52,6 +65,7 @@ public class Player {
             } else {
                 gainGold(amount);
             }
+            vitals.dehydrate(VitalsValues.DEHYDRATION_GOLD);
             System.out.println("GOLD!");
         } else if (token instanceof PickaxeToken pickaxeToken) {
             shed.add(pickaxeToken);
@@ -59,6 +73,11 @@ public class Player {
             if (shed.getTool() instanceof Repairable tool) {
                 tool.repair();
             }
+            vitals.dehydrate(VitalsValues.DEHYDRATION_ANVIL);
+        } else if (token instanceof WaterToken waterToken) {
+            vitals.hydrate(waterToken.amount());
+        } else {
+            vitals.dehydrate(VitalsValues.DEHYDRATION_MOVE);
         }
     }
 }
